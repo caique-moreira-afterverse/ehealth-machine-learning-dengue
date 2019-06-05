@@ -2,7 +2,7 @@ from pandas import *
 from sklearn.utils import column_or_1d
 from sklearn.model_selection import StratifiedKFold
 from sklearn.svm import SVC
-from sklearn.preprocessing import Imputer
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
@@ -365,10 +365,11 @@ def run_Neural(X, y):
 raw_X = pandas.read_csv('dengue-ml-features.data.csv', sep=',')
 raw_Y = pandas.read_csv('dengue-ml-labels.data.csv', sep=',')
 # salvando apenas a primeira coluna como classe
-y = raw_Y.ix[-1]
+# https://stackoverflow.com/questions/15360925/how-to-get-the-first-column-of-a-pandas-dataframe-as-a-series
+y = raw_Y.ix[:,0]
 
 # substituindo dados faltantes pela média da coluna, utilizando Imputer
-imp = Imputer()
+imp = SimpleImputer()
 pre_scale_X = imp.fit_transform(raw_X)
 
 # padronizando as colunas para média 0 e desvio padrão 1, utilizando Scaler
