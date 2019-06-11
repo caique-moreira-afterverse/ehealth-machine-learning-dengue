@@ -21,6 +21,8 @@ def run_SVM(X, y):
 	melhorCGeral = 0
 	melhorGammaGeral = 0
 
+	melhorModeloGeral = None
+
 	# para a validação externa utilizaremos 5-fold
 	fold_5 = StratifiedKFold(n_splits=5)
 
@@ -37,6 +39,7 @@ def run_SVM(X, y):
 		melhorScore = 0
 		melhorGamma = 1
 		melhorC = 1
+		melhorModelo = None
 
 		for indices_treino_2, indices_teste_2 in fold_3.split(X_treino, y_treino):
 
@@ -62,6 +65,7 @@ def run_SVM(X, y):
 						melhorScore = score
 						melhorGamma = gamma
 						melhorC = C
+						melhorModelo = svc
 
 		# treinando novamente SVM, agora utilizando os melhores parametros C e gamma encontrados
 		svc = SVC(C=melhorC, gamma = melhorGamma)
@@ -71,6 +75,7 @@ def run_SVM(X, y):
 			melhorScoreGeral = score
 			melhorGammaGeral = melhorGamma
 			melhorCGeral = melhorC
+			melhorModeloGeral = melhorModelo
 
 		# acumulando acurácia para cálculo da acurácia média
 		somaScores += score
@@ -79,7 +84,7 @@ def run_SVM(X, y):
 	scoreMedio = (1.0 * somaScores) / 5.0
 	print("[SVM] Media acuracia do SVM eh: ", scoreMedio)
 	print("[SVM] Melhor acuracia alcancada pelo SVM eh: ", melhorScoreGeral, ", Hiperparametros: C= ", melhorCGeral, ", Gamma=", melhorGammaGeral)
-	return melhorScoreGeral, scoreMedio
+	return melhorScoreGeral, scoreMedio, melhorModeloGeral
 
 
 # RODANDO KNN (K Nearest Neighbours)
@@ -90,6 +95,8 @@ def run_KNN(X, y):
 	somaScores = 0
 	melhorScoreGeral = 0
 	melhorKGeral = 0
+
+	melhorModeloGeral = None
 
 	# para a validação externa utilizaremos 5-fold
 	fold_5 = StratifiedKFold(n_splits=5)
@@ -106,6 +113,7 @@ def run_KNN(X, y):
 
 		melhorScore = 0
 		melhorK = 1
+		melhorModelo = None
 
 		for indices_treino_2, indices_teste_2 in fold_3.split(X_treino, y_treino):
 
@@ -129,6 +137,7 @@ def run_KNN(X, y):
 				if score > melhorScore:
 					melhorScore = score
 					melhorK = k
+					melhorModelo = knn
 
 		# treinando novamente SVM, agora utilizando os melhores parametros C e gamma encontrados
 		knn = KNeighborsClassifier(n_neighbors=melhorK)
@@ -137,6 +146,7 @@ def run_KNN(X, y):
 		if score > melhorScoreGeral:
 			melhorScoreGeral = score
 			melhorKGeral = melhorK
+			melhorModeloGeral = melhorModelo
 
 		# acumulando acurácia para cálculo da acurácia média
 		somaScores += score
@@ -145,11 +155,11 @@ def run_KNN(X, y):
 	scoreMedio = (1.0 * somaScores) / 5.0
 	print("[KNN] Media acuracia do KNN eh: ", scoreMedio)
 	print("[KNN] Melhor acuracia alcancada pelo KNN eh: ", melhorScoreGeral, ", Hiperparametros: K= ", melhorKGeral)
-	return melhorScoreGeral, scoreMedio
+	return melhorScoreGeral, scoreMedio, melhorModeloGeral
 
 # Rodando RF (Random Forest)
 def run_RF(X, y):
-	nfeaturesList = [10, 15, 20, 25]
+	nfeaturesList = [2, 3, 5, 4]
 	ntreesList = [100, 200, 300, 400]
 
 	scoreMedio = 0
@@ -157,6 +167,7 @@ def run_RF(X, y):
 	melhorScoreGeral = 0
 	melhorNFeaturesGeral = 0
 	melhorNTreesGeral = 0
+	melhorModeloGeral = None
 
 	# para a validação externa utilizaremos 5-fold
 	fold_5 = StratifiedKFold(n_splits=5)
@@ -174,6 +185,7 @@ def run_RF(X, y):
 		melhorScore = 0
 		melhorNFeatures = 1
 		melhorNTrees = 1
+		melhorModelo = None
 
 		for indices_treino_2, indices_teste_2 in fold_3.split(X_treino, y_treino):
 
@@ -200,6 +212,7 @@ def run_RF(X, y):
 						melhorScore = score
 						melhorNFeatures = nfeatures
 						melhorNTrees = ntrees
+						melhorModelo = rf
 
 		# treinando novamente SVM, agora utilizando os melhores parametros C e gamma encontrados
 		rf = RandomForestClassifier(n_estimators=melhorNTrees, max_features=melhorNFeatures)
@@ -209,6 +222,7 @@ def run_RF(X, y):
 			melhorScoreGeral = score
 			melhorNTreesGeral = melhorNTrees
 			melhorNFeaturesGeral = melhorNFeatures
+			melhorModeloGeral = melhorModelo
 
 		# acumulando acurácia para cálculo da acurácia média
 		somaScores += score
@@ -217,7 +231,7 @@ def run_RF(X, y):
 	scoreMedio = (1.0 * somaScores) / 5.0
 	print("[RF] Media acuracia RF eh: ", scoreMedio)
 	print("[RF] Melhor acuracia alcancada pelo RF eh: ", melhorScoreGeral, ", Hiperparametros: nFeatures= ", melhorNFeaturesGeral, ", nTrees=", melhorNTreesGeral)
-	return melhorScoreGeral, scoreMedio
+	return melhorScoreGeral, scoreMedio, melhorModeloGeral
 
 
 #Rodando GBM (Gradient Boosting Machine)
@@ -230,6 +244,7 @@ def run_GBM(X, y):
 	melhorScoreGeral = 0
 	melhorLearningRateGeral = 0
 	melhorNTreesGeral = 0
+	melhorModeloGeral = None
 
 	# para a validação externa utilizaremos 5-fold
 	fold_5 = StratifiedKFold(n_splits=5)
@@ -247,6 +262,7 @@ def run_GBM(X, y):
 		melhorScore = 0
 		melhorLearningRate = 1
 		melhorNTrees = 1
+		melhorModelo = None
 
 		for indices_treino_2, indices_teste_2 in fold_3.split(X_treino, y_treino):
 
@@ -273,6 +289,7 @@ def run_GBM(X, y):
 						melhorScore = score
 						melhorNTrees = ntrees
 						melhorLearningRate = melhorLearningRate
+						melhorModelo = gbm
 
 		# treinando novamente SVM, agora utilizando os melhores parametros C e gamma encontrados
 		gbm = GradientBoostingClassifier(learning_rate=melhorLearningRate, n_estimators=melhorNTrees, max_depth=5)
@@ -282,6 +299,7 @@ def run_GBM(X, y):
 			melhorScoreGeral = score
 			melhorLearningRateGeral = melhorLearningRate
 			melhorNTreesGeral = melhorNTrees
+			melhorModeloGeral = melhorModelo
 
 		# acumulando acurácia para cálculo da acurácia média
 		somaScores += score
@@ -290,7 +308,7 @@ def run_GBM(X, y):
 	scoreMedio = (1.0 * somaScores) / 5.0
 	print("[GBM] Media acuracia GBM eh: ", scoreMedio)
 	print("[GBM] Melhor acuracia alcancada pelo GBM eh: ", melhorScoreGeral, ", Hiperparametros: learningRate= ", melhorLearningRateGeral, ", nTrees=", melhorNTreesGeral)
-	return melhorScoreGeral, scoreMedio
+	return melhorScoreGeral, scoreMedio, melhorModeloGeral
 
 # Rodando Redes Neurais
 def run_Neural(X, y):
@@ -300,6 +318,7 @@ def run_Neural(X, y):
 	somaScores = 0
 	melhorScoreGeral = 0
 	melhorHiddenLayerNGeral = 0
+	melhorModeloGeral = None
 
 	# para a validação externa utilizaremos 5-fold
 	fold_5 = StratifiedKFold(n_splits=5)
@@ -316,6 +335,7 @@ def run_Neural(X, y):
 
 		melhorScore = 0
 		melhorHiddenLayerN = 1
+		melhorModelo = None
 
 		for indices_treino_2, indices_teste_2 in fold_3.split(X_treino, y_treino):
 
@@ -340,6 +360,7 @@ def run_Neural(X, y):
 				if score > melhorScore:
 					melhorScore = score
 					melhorHiddenLayerN = hiddenLayerN
+					melhorModelo = neural
 
 		# treinando novamente SVM, agora utilizando os melhores parametros C e gamma encontrados
 		neural = MLPClassifier(hidden_layer_sizes=melhorHiddenLayerN, max_iter=300)
@@ -348,6 +369,7 @@ def run_Neural(X, y):
 		if score > melhorScoreGeral:
 			melhorScoreGeral = score
 			melhorHiddenLayerNGeral = melhorHiddenLayerN
+			melhorModeloGeral = melhorModelo
 
 		# acumulando acurácia para cálculo da acurácia média
 		somaScores += score
@@ -356,47 +378,50 @@ def run_Neural(X, y):
 	scoreMedio = (1.0 * somaScores) / 5.0
 	print("[neural] Media acuracia eh: ", scoreMedio)
 	print("[neural] Melhor acuracia alcancada pela rede Neural eh: ", melhorScoreGeral, ", Hiperparametros: Numero de Neuronios Camada escondida= ", melhorHiddenLayerNGeral)
-	return melhorScoreGeral, scoreMedio
+	return melhorScoreGeral, scoreMedio, melhorModeloGeral
 
 
 # EXECUTANDO E COMPARANDO OS 5 CLASSIFICADORES
 
-# Lendo CSV utilizando pandas
-raw_X = pandas.read_csv('dengue-ml-features-fixed.data.csv', sep=',')
-raw_Y = pandas.read_csv('dengue-ml-labels.data.csv', sep=',')
-# salvando apenas a primeira coluna como classe
-# https://stackoverflow.com/questions/15360925/how-to-get-the-first-column-of-a-pandas-dataframe-as-a-series
-y = raw_Y.ix[:,0]
+def test_classifiers():
+	# Lendo CSV utilizando pandas
+	raw_X = pandas.read_csv('dengue-ml-features-fixed.data.csv', sep=',')
+	#raw_Y = pandas.read_csv('dengue-ml-labels.data.csv', sep=',')
+	raw_Y = pandas.read_csv('dengue-ml-labels-criticality-classess.data.csv', sep=',')
 
-# substituindo dados faltantes pela média da coluna, utilizando Imputer
-imp = SimpleImputer()
-pre_scale_X = imp.fit_transform(raw_X)
+	# salvando apenas a primeira coluna como classe
+	# https://stackoverflow.com/questions/15360925/how-to-get-the-first-column-of-a-pandas-dataframe-as-a-series
+	y = raw_Y.ix[:,0]
+	
+	# substituindo dados faltantes pela média da coluna, utilizando Imputer
+	#imp = SimpleImputer()
+	#pre_scale_X = imp.fit_transform(raw_X)
+	
+	# padronizando as colunas para média 0 e desvio padrão 1, utilizando Scaler
+	scaler = StandardScaler()
+	X = scaler.fit_transform(raw_X)
 
-# padronizando as colunas para média 0 e desvio padrão 1, utilizando Scaler
-scaler = StandardScaler()
-X = scaler.fit_transform(pre_scale_X)
-
-maiorScoreSVM, mediaScoreSVM = run_SVM(X,y)	
-#maiorScoreRF, mediaScoreRF = run_RF(X, y)
-maiorScoreGBM, mediaScoreGBM = run_GBM(X, y)
-maiorScoreNeural, mediaScoreNeural = run_Neural(X, y)
-
-# guardando valor de X com PCA
-# inicializando PCA com 80% de variância
-pca = PCA(n_components=0.8)
-pca.fit(X)
-X_pca = pca.transform(X)
-maiorScoreKNN, mediaScoreKNN = run_KNN(X_pca, y)
-
-# descobrindo qual classificador teve melhor acurácia média
-#if mediaScoreSVM >= mediaScoreRF and mediaScoreSVM >= mediaScoreGBM and mediaScoreSVM >= mediaScoreNeural and mediaScoreSVM >= mediaScoreKNN:
-#	print("Melhor acuracia media foi do classificador SVM. Acuracia = ", mediaScoreSVM)
-#if mediaScoreRF >= mediaScoreSVM and mediaScoreRF >= mediaScoreGBM and mediaScoreRF >= mediaScoreNeural and mediaScoreRF >= mediaScoreKNN:
-#	print("Melhor acuracia media foi do classificador Random Forest. Acuracia = ", mediaScoreRF)
-#if mediaScoreGBM >= mediaScoreSVM and mediaScoreGBM >= mediaScoreRF and mediaScoreGBM >= mediaScoreNeural and mediaScoreGBM >= mediaScoreKNN:
-#	print("Melhor acuracia media foi do classificador GradientBoostingMachine. Acuracia = ", mediaScoreGBM)
-#if mediaScoreNeural >= mediaScoreSVM and mediaScoreNeural >= mediaScoreRF and mediaScoreNeural >= mediaScoreGBM and mediaScoreNeural >= mediaScoreKNN:
-#	print("Melhor acuracia media foi do classificador de Redes Neurais. Acuracia = ", mediaScoreNeural)
-#if mediaScoreKNN >= mediaScoreSVM and mediaScoreKNN >= mediaScoreRF and mediaScoreKNN >= mediaScoreGBM and mediaScoreKNN >= mediaScoreNeural:
-#	print("Melhor acuracia media foi do classificador KNN. Acuracia = ", mediaScoreKNN) 	 		 		
+	# guardando valor de X com PCA
+	# inicializando PCA com 80% de variância
+	pca = PCA(n_components=0.8)
+	pca.fit(X)
+	X_pca = pca.transform(X)
+	
+	maiorScoreSVM, mediaScoreSVM, svm = run_SVM(X_pca,y)	
+	maiorScoreRF, mediaScoreRF, rf = run_RF(X_pca, y)
+	maiorScoreGBM, mediaScoreGBM, gbm = run_GBM(X_pca, y)
+	maiorScoreNeural, mediaScoreNeural, neural = run_Neural(X, y)
+	maiorScoreKNN, mediaScoreKNN, knn = run_KNN(X_pca, y)
+	
+	# descobrindo qual classificador teve melhor acurácia média
+	#if mediaScoreSVM >= mediaScoreRF and mediaScoreSVM >= mediaScoreGBM and mediaScoreSVM >= mediaScoreNeural and mediaScoreSVM >= mediaScoreKNN:
+	#	print("Melhor acuracia media foi do classificador SVM. Acuracia = ", mediaScoreSVM)
+	#if mediaScoreRF >= mediaScoreSVM and mediaScoreRF >= mediaScoreGBM and mediaScoreRF >= mediaScoreNeural and mediaScoreRF >= mediaScoreKNN:
+	#	print("Melhor acuracia media foi do classificador Random Forest. Acuracia = ", mediaScoreRF)
+	#if mediaScoreGBM >= mediaScoreSVM and mediaScoreGBM >= mediaScoreRF and mediaScoreGBM >= mediaScoreNeural and mediaScoreGBM >= mediaScoreKNN:
+	#	print("Melhor acuracia media foi do classificador GradientBoostingMachine. Acuracia = ", mediaScoreGBM)
+	#if mediaScoreNeural >= mediaScoreSVM and mediaScoreNeural >= mediaScoreRF and mediaScoreNeural >= mediaScoreGBM and mediaScoreNeural >= mediaScoreKNN:
+	#	print("Melhor acuracia media foi do classificador de Redes Neurais. Acuracia = ", mediaScoreNeural)
+	#if mediaScoreKNN >= mediaScoreSVM and mediaScoreKNN >= mediaScoreRF and mediaScoreKNN >= mediaScoreGBM and mediaScoreKNN >= mediaScoreNeural:
+	#	print("Melhor acuracia media foi do classificador KNN. Acuracia = ", mediaScoreKNN) 	 		 		
 
