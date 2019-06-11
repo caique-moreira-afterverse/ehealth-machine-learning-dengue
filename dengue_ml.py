@@ -387,7 +387,7 @@ def test_classifiers():
 	# Lendo CSV utilizando pandas
 	raw_X = pandas.read_csv('dengue-ml-features-fixed.data.csv', sep=',')
 	#raw_Y = pandas.read_csv('dengue-ml-labels.data.csv', sep=',')
-	raw_Y = pandas.read_csv('dengue-ml-labels-criticality-classess.data.csv', sep=',')
+	raw_Y = pandas.read_csv('dengue-ml-labels-criticality-3-classess.data.csv', sep=',')
 
 	# salvando apenas a primeira coluna como classe
 	# https://stackoverflow.com/questions/15360925/how-to-get-the-first-column-of-a-pandas-dataframe-as-a-series
