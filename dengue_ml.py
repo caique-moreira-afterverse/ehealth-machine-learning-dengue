@@ -362,7 +362,7 @@ def run_Neural(X, y):
 # EXECUTANDO E COMPARANDO OS 5 CLASSIFICADORES
 
 # Lendo CSV utilizando pandas
-raw_X = pandas.read_csv('dengue-ml-features.data.csv', sep=',')
+raw_X = pandas.read_csv('dengue-ml-features-fixed.data.csv', sep=',')
 raw_Y = pandas.read_csv('dengue-ml-labels.data.csv', sep=',')
 # salvando apenas a primeira coluna como classe
 # https://stackoverflow.com/questions/15360925/how-to-get-the-first-column-of-a-pandas-dataframe-as-a-series
@@ -377,7 +377,7 @@ scaler = StandardScaler()
 X = scaler.fit_transform(pre_scale_X)
 
 maiorScoreSVM, mediaScoreSVM = run_SVM(X,y)	
-maiorScoreRF, mediaScoreRF = run_RF(X, y)
+#maiorScoreRF, mediaScoreRF = run_RF(X, y)
 maiorScoreGBM, mediaScoreGBM = run_GBM(X, y)
 maiorScoreNeural, mediaScoreNeural = run_Neural(X, y)
 
@@ -389,14 +389,14 @@ X_pca = pca.transform(X)
 maiorScoreKNN, mediaScoreKNN = run_KNN(X_pca, y)
 
 # descobrindo qual classificador teve melhor acurácia média
-if mediaScoreSVM >= mediaScoreRF and mediaScoreSVM >= mediaScoreGBM and mediaScoreSVM >= mediaScoreNeural and mediaScoreSVM >= mediaScoreKNN:
-	print("Melhor acuracia media foi do classificador SVM. Acuracia = ", mediaScoreSVM)
-if mediaScoreRF >= mediaScoreSVM and mediaScoreRF >= mediaScoreGBM and mediaScoreRF >= mediaScoreNeural and mediaScoreRF >= mediaScoreKNN:
-	print("Melhor acuracia media foi do classificador Random Forest. Acuracia = ", mediaScoreRF)
-if mediaScoreGBM >= mediaScoreSVM and mediaScoreGBM >= mediaScoreRF and mediaScoreGBM >= mediaScoreNeural and mediaScoreGBM >= mediaScoreKNN:
-	print("Melhor acuracia media foi do classificador GradientBoostingMachine. Acuracia = ", mediaScoreGBM)
-if mediaScoreNeural >= mediaScoreSVM and mediaScoreNeural >= mediaScoreRF and mediaScoreNeural >= mediaScoreGBM and mediaScoreNeural >= mediaScoreKNN:
-	print("Melhor acuracia media foi do classificador de Redes Neurais. Acuracia = ", mediaScoreNeural)
-if mediaScoreKNN >= mediaScoreSVM and mediaScoreKNN >= mediaScoreRF and mediaScoreKNN >= mediaScoreGBM and mediaScoreKNN >= mediaScoreNeural:
-	print("Melhor acuracia media foi do classificador KNN. Acuracia = ", mediaScoreKNN) 	 		 		
+#if mediaScoreSVM >= mediaScoreRF and mediaScoreSVM >= mediaScoreGBM and mediaScoreSVM >= mediaScoreNeural and mediaScoreSVM >= mediaScoreKNN:
+#	print("Melhor acuracia media foi do classificador SVM. Acuracia = ", mediaScoreSVM)
+#if mediaScoreRF >= mediaScoreSVM and mediaScoreRF >= mediaScoreGBM and mediaScoreRF >= mediaScoreNeural and mediaScoreRF >= mediaScoreKNN:
+#	print("Melhor acuracia media foi do classificador Random Forest. Acuracia = ", mediaScoreRF)
+#if mediaScoreGBM >= mediaScoreSVM and mediaScoreGBM >= mediaScoreRF and mediaScoreGBM >= mediaScoreNeural and mediaScoreGBM >= mediaScoreKNN:
+#	print("Melhor acuracia media foi do classificador GradientBoostingMachine. Acuracia = ", mediaScoreGBM)
+#if mediaScoreNeural >= mediaScoreSVM and mediaScoreNeural >= mediaScoreRF and mediaScoreNeural >= mediaScoreGBM and mediaScoreNeural >= mediaScoreKNN:
+#	print("Melhor acuracia media foi do classificador de Redes Neurais. Acuracia = ", mediaScoreNeural)
+#if mediaScoreKNN >= mediaScoreSVM and mediaScoreKNN >= mediaScoreRF and mediaScoreKNN >= mediaScoreGBM and mediaScoreKNN >= mediaScoreNeural:
+#	print("Melhor acuracia media foi do classificador KNN. Acuracia = ", mediaScoreKNN) 	 		 		
 
